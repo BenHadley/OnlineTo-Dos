@@ -1,0 +1,43 @@
+﻿@model IEnumerable<OnlineTaskList.Web.Models.TaskItem>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.LastUpdated)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsComplete)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.Take(Model.Count() + 1)) // Bugfix - without my .Take() code, when the table is build without the AJAX call it skips whatever is in position 0. Googling is not giving me answers, need to ask another dev
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastUpdated)
+            </td>
+            <td>
+                @if (item.IsComplete)
+                {
+                    <div class="CompletedTask">@Html.DisplayFor(modelItem => item.Description)</div>
+                }
+                else
+                {
+                    @Html.DisplayFor(modelItem => item.Description)
+                }
+            </td>
+            <td>
+                @Html.CheckBoxFor(modelItem => item.IsComplete, new { id = item.Id, @class = "TaskItemCompleted" })
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>
+<script src="~/My_Scripts/IsCompleteListener.js"></script>

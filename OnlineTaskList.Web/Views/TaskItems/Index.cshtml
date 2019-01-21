@@ -1,0 +1,35 @@
+﻿@model OnlineTaskList.Web.Models.TaskItem
+
+@{
+    ViewBag.Title = "Task List";
+}
+
+<h2>My Tasks</h2>
+
+<div id="table"></div>
+
+<div id="createNew">
+    @using (Ajax.BeginForm("AJAXCreateNew", "TaskItems",
+        new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "table",
+            HttpMethod = "POST"
+        }))
+    {
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    }
+
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/My_Scripts/TableBuilder.js"></script>
+    @Scripts.Render("~/bundles/jqueryval")
+}
